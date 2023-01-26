@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Validator;
@@ -41,6 +40,8 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+        $user->roles;
+
 
         $payload = auth('api')->payload();
 
@@ -48,6 +49,7 @@ class AuthController extends Controller
                 'status' => 'success',
                 'data' => [
                     'user' => $user,
+                    'permissions' => $user->permissions(),
                     'tkn_expires_in' => auth('api')->factory()->getTTL() . " min.",
                     'tkn_expire_date' => date('m/d/Y H:i:s', $payload('exp')),
                 ],
@@ -115,9 +117,10 @@ class AuthController extends Controller
     {
         $token = Auth::refresh(true, true);
         auth('api')->setToken($token);
-        $payload = auth('api')->payload();//Auth::payload();//auth('api')->payload();
+        $payload = auth('api')->payload();
         return response()->json([
             'status' => 'success',
+            'message' => 'Successfully refreshed token',
             'data' => [
                 'user' => Auth::user(),
                 'authorization' => [
@@ -131,19 +134,19 @@ class AuthController extends Controller
         ->header( 'Access-Control-Expose-Headers' ,'jwt');
     }
 
-    public function get_user(Request $request)
+    public function getUserData()
     {
         $payload = auth('api')->payload();
 
-        $user = Auth::user();//JWTAuth::authenticate($request->token);
-        // $user->roles;
+        $user = Auth::user();
+        $user->roles;
  
         return response()->json([
-            'success' => true,
+            'status' => 'success',
             'message' => '',
             'data' => [
                 'user' => $user,
-                //'roles' => $user->roles,
+                'permissions' => $user->permissions(),
                 'expire_in' => auth('api')->factory()->getTTL() . " min. ",
                 'expire_date' => date('m/d/Y H:i:s', $payload('exp')),
                 'payload' => $payload->toArray()

@@ -7,7 +7,7 @@
 
 2.- Create the DB and DB user, make sure that remote MySQL can be accessed from our IP (Give access to the IP from the web hosting)
 
-3.- Configure DB connection in .env file (optional: .env.example without adding production passwords as it will be uploaded to git):
+3.- Configure DB connection in .env file (optional: .env.example without adding production passwords since it will be uploaded to git):
 
 DB_CONNECTION=mysql
 DB_HOST=191.101.13.223 // IP de tu hosting web
@@ -57,7 +57,6 @@ Repo: https://github.com/PHP-Open-Source-Saver/jwt-auth
             'driver' => 'jwt',
             'provider' => 'users',
     ],
-
 ],
 
 7.- Modify the User model app/Models/User.php
@@ -68,3 +67,17 @@ Note: For change JWT expire time, modify 'ttl' => env('JWT_TTL', 10) in config/j
 
 9.- Create the AuthController and add auth methods
 > php artisan make:controller AuthController
+
+## Roles and permissions
+
+> php artisan make:migration create_roles_permissions_tables
+> php artisan make:model Role
+> php artisan make:model Permission
+> php artisan make:middleware Authorization
+
+Add Authorization middleware in routeMiddleware app/Http/Kernel.php 
+'authorization' => \App\Http\Middleware\Authorization::class
+
+> php artisan make:controller RoleController
+> php artisan make:controller PermissionController
+> php artisan make:controller UserController

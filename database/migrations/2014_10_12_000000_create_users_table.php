@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->require();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->require();
-            $table->string('email')->unique();
+            $table->string('email'); //->unique();  Remove the unique() to make manual validations with the reg status != 99
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
