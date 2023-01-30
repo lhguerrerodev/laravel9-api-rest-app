@@ -27,7 +27,11 @@ class AuthController extends Controller
 
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid params',
+                'error' => $validator->messages()
+            ], 200);
         }
 
         $token = Auth::attempt($credentials);
@@ -42,6 +46,8 @@ class AuthController extends Controller
         $user = Auth::user();
         $user->roles;
 
+        $user->permissions = $user->permissions();
+
 
         $payload = auth('api')->payload();
 
@@ -49,9 +55,10 @@ class AuthController extends Controller
                 'status' => 'success',
                 'data' => [
                     'user' => $user,
-                    'permissions' => $user->permissions(),
-                    'tkn_expires_in' => auth('api')->factory()->getTTL() . " min.",
-                    'tkn_expire_date' => date('m/d/Y H:i:s', $payload('exp')),
+                    //'permissions' => $user->permissions(),
+                    'jwtExpiresAt' => $payload('exp'),
+                    'jwtExpiresIn' => auth('api')->factory()->getTTL() . " min.",
+                    'jwtExpireDate' => date('m/d/Y H:i:s', $payload('exp')),
                 ],
             ])
             ->header( 'jwt' ,$token)

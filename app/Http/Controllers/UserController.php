@@ -26,7 +26,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('reg_status', '0')
+        // Exclude super admin user
+        $users = User::where('reg_status', '0')->where('id', '<>', 1)
             //->orderBy('name')
             //->take(10)
             ->get();
@@ -82,7 +83,7 @@ class UserController extends Controller
         //Validate data
         $validator = Validator::make($data, [
             'name' => 'required|string|max:100',
-            'middle_name' => 'required|string|max:100',
+            'middle_name' => 'nullable|string|max:100',
             'last_name' => 'required|string|max:100',
             'email' => [
                 'required',
