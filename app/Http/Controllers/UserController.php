@@ -30,7 +30,7 @@ class UserController extends Controller
         $users = User::where('reg_status', '0')->where('id', '<>', 1)
             //->orderBy('name')
             //->take(10)
-            ->get();
+            ->get()->makeVisible(['password']);
         //User::all()->where('reg_status', '0'); // Company::orderBy('id','desc')->paginate(5);
 
         return response()->json([
@@ -51,6 +51,7 @@ class UserController extends Controller
     public function read($id)
     {
         $user = User::where('id', $id)->where('reg_status', '0')->first();
+        
 
         if ($user) {
             $user->roles;
@@ -59,7 +60,7 @@ class UserController extends Controller
                 'message' => '',
                 'data' => [
                     'user' => $user,
-                    'permissions' => $user->permissions()
+                    //'permissions' => $user->permissions()
                 ]
             ]);
         } else {
@@ -338,7 +339,7 @@ class UserController extends Controller
                 'message' => 'User updated successfully',
                 'data' => [
                     'user' => $user,
-                    'permissions' => $user->permissions()
+                    //'permissions' => $user->permissions()
                 ]
             ]);
         } else
@@ -375,7 +376,7 @@ class UserController extends Controller
                 'message' => 'Role removed successfuly',
                 'data' => [
                     'user' => $user,
-                    'permissions' => $user->permissions()
+                    //'permissions' => $user->permissions()
                 ]
             ]);
         } else
@@ -412,7 +413,7 @@ class UserController extends Controller
                 'message' => 'Permission removed successfuly',
                 'data' => [
                     'user' => $user,
-                    'permissions' => $user->permissions()
+                    //'permissions' => $user->permissions()
                 ]
             ]);
         } else

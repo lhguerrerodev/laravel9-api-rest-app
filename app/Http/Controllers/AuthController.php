@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login','register', 'refresh']]);
     }
 
     public function login(Request $request)
@@ -45,8 +45,9 @@ class AuthController extends Controller
 
         $user = Auth::user();
         $user->roles;
+        $user->permissions;
 
-        $user->permissions = $user->permissions();
+        //$user->permissions = $user->permissions();
 
 
         $payload = auth('api')->payload();
@@ -124,7 +125,33 @@ class AuthController extends Controller
     {
         $token = Auth::refresh(true, true);
         auth('api')->setToken($token);
+        
+        $user = Auth::user();
+        $user->roles;
+
+        $user->permissions; //= $user->permissions();
+
+
         $payload = auth('api')->payload();
+
+        return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'user' => $user,
+                    //'permissions' => $user->permissions(),
+                    'jwtExpiresAt' => $payload('exp'),
+                    'jwtExpiresIn' => auth('api')->factory()->getTTL() . " min.",
+                    'jwtExpireDate' => date('m/d/Y H:i:s', $payload('exp')),
+                ],
+            ])
+            ->header( 'jwt' ,$token)
+            ->header( 'Access-Control-Expose-Headers' ,'jwt');
+
+
+
+
+
+        /*$payload = auth('api')->payload();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully refreshed token',
@@ -138,7 +165,7 @@ class AuthController extends Controller
             ] 
         ])
         ->header( 'jwt' ,$token)
-        ->header( 'Access-Control-Expose-Headers' ,'jwt');
+        ->header( 'Access-Control-Expose-Headers' ,'jwt');*/
     }
 
     public function getUserData()
@@ -147,13 +174,14 @@ class AuthController extends Controller
 
         $user = Auth::user();
         $user->roles;
+        $user->permissions;
  
         return response()->json([
             'status' => 'success',
             'message' => '',
             'data' => [
                 'user' => $user,
-                'permissions' => $user->permissions(),
+                //'permissions' => $user->permissions(),
                 'expire_in' => auth('api')->factory()->getTTL() . " min. ",
                 'expire_date' => date('m/d/Y H:i:s', $payload('exp')),
                 'payload' => $payload->toArray()

@@ -34,7 +34,7 @@ class Authorization
                 }
 
             } else if ($type == 'per' ) {
-                $permissions = $user->permissions();
+                $permissions = $user->allPermissions();
                 error_log(implode(" ",$permissions));
 
                 if (in_array($value, $permissions)) {

@@ -81,3 +81,13 @@ Add Authorization middleware in routeMiddleware app/Http/Kernel.php
 > php artisan make:controller RoleController
 > php artisan make:controller PermissionController
 > php artisan make:controller UserController
+
+
+## Despues de clonar 
+copy - paste .env.example and rename with .env
+configure db conection in .env
+> composer install
+> php artisan key:generate
+> php artisan jwt:secret
+
+Note: make sure bd password contains valid characters for .env file

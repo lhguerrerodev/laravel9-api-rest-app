@@ -25,7 +25,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::where('reg_status', '0')->get()->makeVisible('id');
+        $roles = Role::where('reg_status', '0')->where('id', '<>', 1)->get()->makeVisible('id');
 
         return response()->json([
             'status' => 'success',

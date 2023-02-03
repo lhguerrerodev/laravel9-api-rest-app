@@ -94,7 +94,7 @@ class User extends Authenticatable implements JWTSubject
                 'role_id');
     }
 
-    public function permissionsR()
+    public function permissions()
     {
     //return $this->belongsToMany(RelatedModel, pivot_table_name, foreign_key_of_current_model_in_pivot_table, foreign_key_of_other_model_in_pivot_table);
       return $this->belongsToMany(
@@ -104,7 +104,7 @@ class User extends Authenticatable implements JWTSubject
                 'permission_id');
     }
 
-    public function permissions()
+    public function allPermissions()
     {
     
         $permissions = DB::select(' SELECT * FROM (SELECT p.id, p.name
@@ -126,5 +126,18 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $arrayPer;
+    }
+
+    /*public function getPassword($pass)
+    {
+        return Crypt::decrypt($pass);
+ 
+    }*/
+
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Crypt::decrypt($value),
+        );
     }
 }
