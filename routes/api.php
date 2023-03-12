@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CVController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -54,3 +57,6 @@ Route::controller(PermissionController::class)->middleware('authorization:rol_su
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'delete');
 });
+
+
+Route::post('contact', [CVController::class, 'postContact']);

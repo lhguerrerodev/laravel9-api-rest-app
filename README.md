@@ -91,3 +91,6 @@ configure db conection in .env
 > php artisan jwt:secret
 
 Note: make sure bd password contains valid characters for .env file
+
+
+php artisan make:rule ReCaptcha
