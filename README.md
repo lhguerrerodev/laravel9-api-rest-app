@@ -94,3 +94,21 @@ Note: make sure bd password contains valid characters for .env file
 
 
 php artisan make:rule ReCaptcha
+
+
+Al hacer cambios en las migraciones hacemos:
+> php artisan migrate:fresh
+
+Al hacer cambios en las migraciones y ejecutar los seeds hacemos:
+> php artisan migrate:fresh --seed
+
+Para correr los seeds unicamente: 
+> php artisan db:seed
+
+En produccion: 
+> php artisan db:seed --force
+
+
+5.- Agregar libreria jwt-auth: https://jwt-auth.readthedocs.io/en/develop/
+
+> composer require tymon/jwt-auth

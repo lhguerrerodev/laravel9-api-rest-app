@@ -7,6 +7,9 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CVController;
+use App\Http\Controllers\ProAppsController;
+
+
 
 
 
@@ -60,3 +63,4 @@ Route::controller(PermissionController::class)->middleware('authorization:rol_su
 
 
 Route::post('contact', [CVController::class, 'postContact']);
+Route::get('check-status/{appName}', [ProAppsController::class, 'checkStatus']);
